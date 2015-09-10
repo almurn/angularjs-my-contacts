@@ -19,11 +19,29 @@ angular.module('myContacts.contacts', ['ngRoute', 'firebase'])
   self.contacts = $firebaseArray(ref);
   
   self.showAddForm = function() {
+    self.hide();
     self.addFormShown = true;
   };
   
+  self.showEditForm= function(contact) {
+    self.hide();
+    self.editFormShown = true;
+    self.id = contact.$id;
+    self.name = contact.name;
+    self.email = contact.email;
+    self.company = contact.company;
+    self.work_phone = contact.phones[0].work;
+    self.home_phone = contact.phones[0].home;
+    self.mobile_phone = contact.phones[0].mobile;
+    self.street_address = contact.address[0].street_address;
+    self.city = contact.address[0].city;
+    self.state = contact.address[0].state;
+    self.zipcode = contact.address[0].zipcode;
+  }
+  
   self.hide = function() {
     self.addFormShown = false;
+    self.contactShow = false;
   };
   
   self.addFormSubmit = function() {
@@ -74,6 +92,35 @@ angular.module('myContacts.contacts', ['ngRoute', 'firebase'])
     });
   };
   
+  self.editFormSubmit = function() {
+    console.log("Updating contact");
+    
+    // Get record using ID
+    var record = self.contacts.$getRecord(self.id);
+    record.name = self.name;
+    record.email = self.email;
+    record.company = self.company;
+    record.phones[0].work = self.work_phone;
+    record.phones[0].home = self.home_phone;
+    record.phones[0].mobile = self.mobile_phone;
+    record.address[0].street_address = self.street_address;
+    record.address[0].city = self.city;
+    record.address[0].state = self.state;
+    record.address[0].zipcode = self.zipcode;
+    
+    // Save Contacts
+    self.contacts.$save(record).then(function(ref) {
+      console.log("Record " + ref.key + " saved!");
+    });
+    
+    self.clearFields();
+    
+    // Hide edit form
+    self.editFormShown = false;
+    
+    self.msg = "Contact Updated";
+  };
+  
   self.showContact = function(contact) {
     console.log(contact);
     
@@ -89,6 +136,14 @@ angular.module('myContacts.contacts', ['ngRoute', 'firebase'])
     self.zipcode = contact.address[0].zipcode;
     
     self.contactShow = true;
+  };
+  
+  self.removeContact = function(contact) {
+    console.log("Removing Contact");
+    
+    self.contacts.$remove(contact);
+    
+    self.msg = "Contact Removed";
   };
   
   self.clearFields = function() {
