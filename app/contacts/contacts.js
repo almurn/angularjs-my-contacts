@@ -74,6 +74,23 @@ angular.module('myContacts.contacts', ['ngRoute', 'firebase'])
     });
   };
   
+  self.showContact = function(contact) {
+    console.log(contact);
+    
+    self.name = contact.name;
+    self.email = contact.email;
+    self.company = contact.company;
+    self.work_phone = contact.phones[0].work;
+    self.home_phone = contact.phones[0].home;
+    self.mobile_phone = contact.phones[0].mobile;
+    self.street_address = contact.address[0].street_address;
+    self.city = contact.address[0].city;
+    self.state = contact.address[0].state;
+    self.zipcode = contact.address[0].zipcode;
+    
+    self.contactShow = true;
+  };
+  
   self.clearFields = function() {
     self.name = '';
     self.email = '';

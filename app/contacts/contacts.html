@@ -2,6 +2,25 @@
   <div class="large-10 columns">
     <div data-alert ng-show="contacts.msg" class="alert-box">{{ contacts.msg }}</div>
   
+    <!-- show contact -->
+    <div class="row" ng-show="contacts.contactShow">
+      <div class="panel">
+        <h3>{{ contacts.name }}</h3>
+        <ul>
+          <li><strong>Company:</strong>{{ contacts.company }}</li>
+          <li><strong>Email Address:</strong>{{ contacts.email }}</li>
+          <h5>Phone Numbers</h5>
+          <li><strong>Work:</strong>{{ contacts.work_phone }}</li>
+          <li><strong>Home:</strong>{{ contacts.home_phone }}</li>
+          <li><strong>Mobile:</strong>{{ contacts.mobile_phone }}</li>
+          <h5>Location Info</h5>
+          <li>{{ contacts.street_address }}</li>
+          <li>{{ contacts.city }}, {{ contacts.state }} {{ contacts.zipcode }}</li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- form for adding new contact -->
     <form ng-submit="contacts.addFormSubmit()" ng-show="contacts.addFormShown">
       <h3>Add Contact</h3>
       <!-- Add Form -->
@@ -84,7 +103,7 @@
       </thead>
       <tbody>
         <tr ng-repeat="contact in contacts.contacts">
-          <td><a href="#">{{ contact.name }}</a></td>
+          <td><a ng-click="contacts.showContact(contact)">{{ contact.name }}</a></td>
           <td>{{ contact.company }}</td>
           <td>{{ contact.email }}</td>
           <td><a class="button tiny" ng-click="contacts.showEditForm(contact)">Edit</a>
